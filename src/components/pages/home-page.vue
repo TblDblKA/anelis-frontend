@@ -115,6 +115,7 @@
             <div class="hp-our-services__item-link">
               <app-link
                   :minor="true"
+                  @click="$router.push('/services')"
               >
                 Read more
               </app-link>
@@ -133,6 +134,7 @@
             <div class="hp-cases__name">ZIEDA'S CLINIC</div>
             <app-link
                 :middle="true"
+                @click="onCaseClick('zieda-clinic')"
             >
               view case
             </app-link>
@@ -149,6 +151,7 @@
             <div class="hp-cases__name">CERRETO.MEAT</div>
             <app-link
                 :middle="true"
+                @click="onCaseClick('ceretto')"
             >
               view case
             </app-link>
@@ -157,6 +160,7 @@
             <div class="hp-cases__name">STARTUP CFFERA</div>
             <app-link
                 :middle="true"
+                @click="onCaseClick('cffera')"
             >
               view case
             </app-link>
@@ -166,7 +170,10 @@
               class="home-page__case-pic"
           />
         </div>
-        <span class="hp-cases__view">
+        <span
+          class="hp-cases__view"
+          @click="$router.push('/cases')"
+        >
           VIEW ALL
         </span>
       </div>
@@ -216,8 +223,15 @@ export default {
     }
   },
   methods: {
-    onClick() {
-      console.log('click')
+    onCaseClick (label) {
+      // TODO: переключаться на текущий кейс
+      this.$router.push({
+        name: 'Cases',
+        props: {
+          currentItem: label
+        }
+      })
+
     }
   }
 }

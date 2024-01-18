@@ -264,9 +264,15 @@ export default {
     Results,
     WorkWithUs
   },
+  props: {
+    currentItem: {
+      type: String,
+      default: ''
+    }
+  },
   data () {
     return {
-      currentShownName: ''
+      currentShownName: this.currentItem
     }
   },
   methods: {

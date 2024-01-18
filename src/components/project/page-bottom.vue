@@ -8,14 +8,23 @@
         <div class="page-bottom__form">
           <input
               placeholder="your name"
+              v-model="name"
               class="page-bottom__input"
+              :class="{ 'page-bottom__input_error': nameError }"
+              @input="nameError = false"
           />
           <div class="page-bottom__contact">
             <input
                 class="page-bottom__input page-bottom__email"
                 placeholder="email"
+                v-model="email"
+                @input="emailError = false"
+                :class="{ 'page-bottom__input_error' : emailError }"
             />
-            <div class="page-bottom__contact-button">
+            <div
+              class="page-bottom__contact-button"
+              @click="onSubmitForm"
+            >
               contact me
             </div>
           </div>
@@ -40,12 +49,30 @@
         </div>
         <div class="page-bottom__links">
           <div class="page-bottom__telephone">
-            +66 62 080 4986
+            <a href="tel:+66 62 080 4986">+66 62 080 4986</a>
           </div>
           <div class="page-bottom__socials">
-            <app-sprite-icon :icon-link="$options.icons.Instagram"/>
-            <app-sprite-icon :icon-link="$options.icons.WhatsApp"/>
+            <a
+              href="https://www.instagram.com/buro.anelis/"
+              target="_blank"
+              rel="noopener"
+            >
+              <app-sprite-icon :icon-link="$options.icons.Instagram"/>
+            </a>
+            <a
+              href="https://wa.me/message/DI3UVFEMU2JTJ1"
+              target="_blank"
+              rel="noopener"
+            >
+              <app-sprite-icon :icon-link="$options.icons.WhatsApp"/>
+            </a>
+            <a
+              href="https://www.facebook.com/profile.php?id=100082230406340&mibextid=LQQJ4d"
+              target="_blank"
+              rel="noopener"
+            >
             <app-sprite-icon :icon-link="$options.icons.Facebook"/>
+            </a>
           </div>
         </div>
       </div>
@@ -58,7 +85,11 @@
             Feel free to get in touch with us via email
           </div>
           <div class="page-bottom__connect-text">
-            buro.anelis@agency
+            <a
+              href="mailto:buro.anelis@agency"
+            >
+              buro.anelis@agency
+            </a>
           </div>
         </div>
       </div>
@@ -85,6 +116,8 @@
 <script>
 import AppSpriteIcon from '@/components/base/app-sprite-icon'
 
+import emailjs from 'emailjs-com'
+
 import Instagram from '@/assets/svg/instagram.svg'
 import WhatsApp from '@/assets/svg/whatsapp.svg'
 import Facebook from '@/assets/svg/facebook.svg'
@@ -96,9 +129,48 @@ export default {
     WhatsApp,
     Facebook
   },
+  data () {
+    return {
+      name: '',
+      email: '',
+      nameError: false,
+      emailError: false
+    }
+  },
   methods: {
     onPageChange () {
       this.$router.push({ name: 'Policies' })
+    },
+    onSubmitForm () {
+      let validRegex = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
+      const validate = validRegex.test(this.email.toLowerCase())
+      if (this.name === '' || !validate) {
+        console.log('name', this.name, validate)
+        if (this.name === '') {
+          this.nameError = true
+        }
+        if (!validate) {
+          this.emailError = true
+        }
+        return
+      }
+      try {
+        emailjs.send('service_s03yd9z', 'template_39ek00t', {
+          name: this.name,
+          email: this.email,
+          source: 'NA',
+          surname: 'NA',
+          country: 'NA',
+          project: 'NA',
+          company: 'NA',
+          services: 'NA'
+        })
+
+      } catch(error) {
+          console.log({error})
+      }
+      this.name = ''
+      this.email = ''
     }
   }
 }
@@ -110,6 +182,10 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 80px;
+  & a {
+      color: #FFF9F9;
+      text-decoration: none;
+    }
   &__content {
     display: grid;
     grid-template-columns: 1.5fr 1fr 1fr 1fr;
@@ -149,6 +225,12 @@ export default {
     text-align: left;
     height: 50px;
     padding-left: 20px;
+    &_error {
+      background-color: #cc0000;
+      &::placeholder {
+        color: #FFF9F9!important;
+      }
+    }
   }
   &__contact {
     display: flex;
@@ -192,6 +274,10 @@ export default {
     line-height: 23px;
     letter-spacing: 0.025em;
     text-align: left;
+    cursor: pointer;
+    &:hover {
+        text-decoration: underline;
+      }
   }
   &__socials {
     display: flex;
@@ -216,6 +302,12 @@ export default {
     letter-spacing: 0px;
     text-align: left;
     word-wrap: break-word;
+    & a {
+      cursor: pointer;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
   }
 }
 

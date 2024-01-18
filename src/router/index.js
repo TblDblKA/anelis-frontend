@@ -41,7 +41,8 @@ const routes = [
         name: 'Cases',
         meta: {
             reload: true,
-        }
+        },
+        props: true
     },
     {
         path: '/contacts',
@@ -69,6 +70,7 @@ const router = new Router({
         // TODO: скролл наверх при обновлении страницы
         return { top: 0 }
     },
+    props: true
 })
 
 

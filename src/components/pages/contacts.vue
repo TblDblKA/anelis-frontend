@@ -11,26 +11,33 @@
               <div class="contacts__name">
                 collaboration
               </div>
-              <div class="contacts__mail">
+              <a class="contacts__mail" href="mailto:cooperation.Anelis@agency">
                 cooperation.Anelis@agency
-              </div>
+              </a>
             </div>
             <div class="contacts__item">
               <div class="contacts__name">
                 contact our HR manager
               </div>
-              <div class="contacts__mail">
+              <a class="contacts__mail" href="mailto:hr.Anelis@agency">
                 hr.Anelis@agency
-              </div>
+              </a>
             </div>
           </div>
           <div class="contacts__item">
             <div class="contacts__name">
               Start a whatsapp chat
             </div>
-            <div class="contacts__button">
-              <app-sprite-icon :icon-link="$options.icons.RightArrrow"/>
-            </div>
+            <!-- <div > -->
+              <a
+                href="https://wa.me/message/DI3UVFEMU2JTJ1"
+                target="_blank"
+                rel="noopener"
+                class="contacts__button"
+              >
+                <app-sprite-icon :icon-link="$options.icons.RightArrrow"/>
+              </a>
+            <!-- </div> -->
           </div>
         </div>
       </div>
@@ -70,6 +77,7 @@ export default {
     width: 100%;
     z-index: 10;
     position: relative;
+    margin-bottom: 250px;
   }
   &__title {
     font-size: 230px;
@@ -122,6 +130,12 @@ export default {
     line-height: 38px;
     letter-spacing: 0;
     text-align: left;
+    cursor: pointer;
+    color: #FFF9F9;
+    text-decoration: none;
+    &:hover {
+      text-decoration: underline;
+    }
   }
   &__button {
     //width: 100%!important;
@@ -142,8 +156,9 @@ export default {
   &__image {
     position: absolute;
     background-image: url("../../assets/images/map.png");
+    height: 100%;
     opacity: .3;
-
+    background-size: cover;
     top: 0;
     bottom: 0;
     right: -21px;

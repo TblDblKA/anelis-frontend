@@ -17,25 +17,125 @@
       leave your contacts and we will write to you
     </div>
     <div class="work__form">
-      <app-input placeholder="name" req/>
-      <app-input placeholder="email" req/>
-      <app-input placeholder="how did you know about us"/>
-      <app-input placeholder="surname" req/>
-      <app-input placeholder="country"/>
-      <app-input placeholder="tell more about your project"/>
-      <app-input placeholder="company name"/>
-      <app-input placeholder="services you are interested in"/>
-      <div class="work__submit-button">SUBMIT</div>
+      <app-input
+        placeholder="name"
+        req
+        :error="nameError"
+        @input="nameError = false"
+        v-model="name"
+      />
+      <app-input
+        placeholder="email"
+        req
+        :error="emailError"
+        v-model="email"
+        @input="emailError = false"
+      />
+      <app-input
+        placeholder="how did you know about us"
+        v-model="source"
+      />
+      <app-input
+        placeholder="surname"
+        req
+        :error="surnameError"
+        v-model="surname"
+        @input="surnameError = false"
+      />
+      <app-input
+        placeholder="country"
+        v-model="country"
+      />
+      <app-input
+        placeholder="tell more about your project"
+        v-model="project"
+      />
+      <app-input
+        placeholder="company name"
+        v-model="company"
+      />
+      <app-input
+        placeholder="services you are interested in"
+        v-model="services"
+      />
+      <div
+        class="work__submit-button"
+        @click="onSendForm()"
+      >
+          SUBMIT
+        </div>
     </div>
   </div>
 </template>
 
 <script>
+import emailjs from 'emailjs-com'
 import AppInput from '@/components/base/app-input'
 export default {
   name: 'work-with-us',
   components: {
     AppInput
+  },
+  data () {
+    return {
+      name: '',
+      email: '',
+      source: '',
+      surname: '',
+      country: '',
+      project: '',
+      company: '',
+      services: '',
+      nameError: false,
+      surnameError: false,
+      emailError: false
+    }
+  },
+  computed: {
+  },
+  methods: {
+    onSendForm () {
+      let validRegex = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
+      const validate = validRegex.test(this.email.toLowerCase())
+      if (this.name === '' || this.surname === '' || !validate) {
+        if (this.name === '') {
+          this.nameError = true
+        }
+        if (this.surname === '') {
+          this.surnameError = true
+        }
+        if (!validate) {
+          this.emailError = true
+        }
+        return
+      }
+      try {
+        emailjs.send('service_s03yd9z', 'template_39ek00t', {
+          name: this.name,
+          email: this.email,
+          source: this.source || 'NA',
+          surname: this.surname,
+          country: this.country || 'NA',
+          project: this.project || 'NA',
+          company: this.company || 'NA',
+          services: this.services || 'NA'
+        })
+
+      } catch(error) {
+          console.log({error})
+      }
+      this.name = ''
+      this.email = ''
+      this.source = ''
+      this.surname = ''
+      this.country = ''
+      this.project = ''
+      this.company = '',
+      this.services = ''
+    }
+  },
+  mounted () {
+    emailjs.init('UpdwaIsjU6S8ZNPq5');
   }
 }
 </script>
@@ -109,6 +209,7 @@ export default {
   }
   &__form {
     padding-left: 36px;
+    padding-right: 36px;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     gap: 99px 50px;

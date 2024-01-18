@@ -38,11 +38,6 @@ export default {
       }
     }
   },
-  methods: {
-    scrollHandle () {
-      console.log('event')
-    }
-  },
   mounted () {
     document.addEventListener("DOMContentLoaded", () => { this.isLoaded = true });
     document.body.addEventListener("wheel", e=>{
@@ -78,6 +73,7 @@ export default {
   padding: 0;
   display: block;
   float: left;
+  /* height: 100%; */
   /*vertical-align: top;*/
 }
 

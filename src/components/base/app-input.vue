@@ -1,7 +1,15 @@
 <template>
-  <div class="app-input__wrapper">
+  <div
+    class="app-input__wrapper"
+    :class="{ 'app-input__wrapper_error': error }"
+  >
     <div class="app-input">
-      <input type="text" :placeholder="text">
+      <input
+        type="text"
+        :placeholder="text"
+        :value="value"
+        @input="$emit('input', $event.target.value)"
+      >
     </div>
   </div>
 </template>
@@ -15,6 +23,14 @@ export default {
       required: true
     },
     req: {
+      type: Boolean,
+      default: false
+    },
+    value: {
+      type: String,
+      required: true
+    },
+    error: {
       type: Boolean,
       default: false
     }
@@ -33,6 +49,9 @@ export default {
     border-bottom: 1px solid #FFF9F9;
     width: 100%;
     height: 45px;
+    &_error {
+      border-bottom: red 1px solid;
+    }
   }
   & input {
     background: none;
