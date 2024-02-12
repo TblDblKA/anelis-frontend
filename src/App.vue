@@ -1,15 +1,16 @@
 <template>
   <div id="app" ref="app">
-<!--    TODO: разобраться со скроллом-->
     <vue-custom-scrollbar
         class="scroll-area"
         :settings="settings"
-        :switcher="false"
-        ref="scroll"
+        :suppressScrollX="true"
+        tagname="div"
     >
-      <page-header/>
-      <router-view/>
-      <page-bottom/>
+      <div class="wrapper">
+        <page-header/>
+        <router-view/>
+        <page-bottom/>
+      </div>
     </vue-custom-scrollbar>
   </div>
 </template>
@@ -33,7 +34,7 @@ export default {
       isLoaded: false,
       settings: {
         suppressScrollY: false,
-        suppressScrollX: false,
+        suppressScrollX: true,
         wheelPropagation: true
       }
     }
@@ -85,13 +86,14 @@ body {
 .scroll-area {
   position: relative;
   margin: auto;
-  /*width: 100%;*/
   height: 100%;
-  /*width: 600px;*/
-  /*height: 400px;*/
 }
 
 .active-link {
   text-decoration: underline;
+}
+.wrapper {
+  display: flex;
+  flex-direction: column;
 }
 </style>

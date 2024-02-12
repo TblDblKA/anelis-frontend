@@ -75,82 +75,167 @@ export default {
 </script>
 
 <style lang="scss">
-.app-link-major {
-  padding: 10px;
-  display: flex;
-  flex-direction: row;
-  gap: 25px;
-  &__text {
-    font-size: 30px;
-    line-height: 50px;
-    cursor: pointer;
-    border-bottom: 1px solid #131315;
-    &:hover {
-      border-bottom: 1px solid #FFF9F9;
+@media screen and (min-width: 600px) {
+  .app-link-major {
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    gap: 25px;
+    &__text {
+      font-size: 30px;
+      line-height: 50px;
+      cursor: pointer;
+      border-bottom: 1px solid #131315;
+      &:hover {
+        border-bottom: 1px solid #FFF9F9;
+      }
+    }
+    &__arrow {
+      //align-self: center;
+      position: relative;
+      top: 15px;
+      color: #FFF9F9;
+      width: 101px;
+      height: 8px;
+      &:hover {}
+      cursor: pointer;
     }
   }
-  &__arrow {
-    //align-self: center;
-    position: relative;
-    top: 15px;
-    color: #FFF9F9;
-    width: 101px;
-    height: 8px;
-    &:hover {}
-    cursor: pointer;
+
+  .app-link-minor {
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    &__text {
+      font-size: 17px;
+      line-height: 22px;
+      cursor: pointer;
+      border-bottom: 1px solid #131315;
+      &:hover {
+        border-bottom: 1px solid #FFF9F9;
+      }
+    }
+    &__arrow {
+      //align-self: center;
+      position: relative;
+      //top: px;
+      color: #FFF9F9;
+      width: 51px;
+      height: 8px;
+      &:hover {}
+      cursor: pointer;
+    }
+  }
+
+  .app-link-middle {
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    &__text {
+      font-size: 22px;
+      line-height: 30px;
+      cursor: pointer;
+      // TODO: фон по фону элемента
+      border-bottom: 1px solid #131F31;
+      &:hover {
+        border-bottom: 1px solid #FFF9F9;
+      }
+    }
+    &__arrow {
+      //align-self: center;
+      position: relative;
+      top: 5px;
+      color: #FFF9F9;
+      width: 72px;
+      height: 8px;
+      &:hover {}
+      cursor: pointer;
+    }
   }
 }
 
-.app-link-minor {
-  padding: 10px;
-  display: flex;
-  flex-direction: row;
-  gap: 8px;
-  &__text {
-    font-size: 17px;
-    line-height: 22px;
-    cursor: pointer;
-    border-bottom: 1px solid #131315;
-    &:hover {
-      border-bottom: 1px solid #FFF9F9;
+@media screen and (max-width: 600px) {
+  .app-link-major {
+    padding: 5px;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    &__text {
+      font-size: 20px;
+      line-height: 27px;
+      cursor: pointer;
+      border-bottom: 1px solid #131315;
+      &:hover {
+        border-bottom: 1px solid #FFF9F9;
+      }
+    }
+    &__arrow {
+      //align-self: center;
+      position: relative;
+      top: 4px;
+      color: #FFF9F9;
+      width: 80px;
+      height: 8px;
+      &:hover {}
+      cursor: pointer;
     }
   }
-  &__arrow {
-    //align-self: center;
-    position: relative;
-    //top: px;
-    color: #FFF9F9;
-    width: 51px;
-    height: 8px;
-    &:hover {}
-    cursor: pointer;
-  }
-}
 
-.app-link-middle {
-  padding: 10px;
-  display: flex;
-  flex-direction: row;
-  gap: 15px;
-  &__text {
-    font-size: 22px;
-    line-height: 30px;
-    cursor: pointer;
-    // TODO: фон по фону элемента
-    border-bottom: 1px solid #131F31;
-    &:hover {
-      border-bottom: 1px solid #FFF9F9;
+  .app-link-minor {
+    padding: 3px;
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    &__text {
+      font-size: 10px;
+      line-height: 14px;
+      cursor: pointer;
+      border-bottom: 1px solid #131315;
+      &:hover {
+        border-bottom: 1px solid #FFF9F9;
+      }
+    }
+    &__arrow {
+      //align-self: center;
+      position: relative;
+      //top: px;
+      color: #FFF9F9;
+      width: 25px;
+      height: 13px;
+      &:hover {}
+      cursor: pointer;
+      & .app-sprite-icon {
+        height: 13px;
+      }
     }
   }
-  &__arrow {
-    //align-self: center;
-    position: relative;
-    top: 5px;
-    color: #FFF9F9;
-    width: 72px;
-    height: 8px;
-    &:hover {}
-    cursor: pointer;
+
+  .app-link-middle {
+    padding: 5px;
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    &__text {
+      font-size: 8px;
+      line-height: 11px;
+      cursor: pointer;
+      border-bottom: 1px solid #131F31;
+      &:hover {
+        border-bottom: 1px solid #FFF9F9;
+      }
+    }
+    &__arrow {
+      //align-self: center;
+      position: relative;
+      //top: 5px;
+      color: #FFF9F9;
+      width: 25px;
+      height: 15px;
+      &:hover {}
+      cursor: pointer;
+    }
   }
 }
 </style>

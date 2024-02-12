@@ -16,7 +16,7 @@
       <div class="cases__row">
         <div
             class="cases__elem-wrapper"
-            :style="{ width: '30%', height: '60vh' }"
+            :style="{ width: '30%', height: picHeight }"
         >
           <img
               src="@/assets/images/cases/bruxx.png"
@@ -35,8 +35,8 @@
           </div>
         </div>
         <div
-            class="cases__elem-wrapper"
-            :style="{ width: '36%', height: '60vh' }"
+            class="cases__elem-wrapper ceretto"
+            :style="{ width: '36%', height: picHeight }"
         >
           <img
               src="@/assets/images/cases/cerreto.png"
@@ -55,8 +55,8 @@
           </div>
         </div>
         <div
-            class="cases__elem-wrapper"
-            :style="{ width: '34%', height: '60vh' }"
+            class="cases__elem-wrapper alexandrov"
+            :style="{ width: '34%', height: picHeight }"
         >
           <img
               src="@/assets/images/cases/alexandrov.png"
@@ -77,8 +77,8 @@
       </div>
       <div class="cases__row">
         <div
-            class="cases__elem-wrapper"
-            :style="{ width: '48%', height: '60vh' }"
+            class="cases__elem-wrapper organic"
+            :style="{ width: '48%', height: picHeight }"
         >
           <img
               src="@/assets/images/cases/organic.png"
@@ -97,8 +97,8 @@
           </div>
         </div>
         <div
-            class="cases__elem-wrapper"
-            :style="{ width: '29%', height: '60vh' }"
+            class="cases__elem-wrapper bakinsky"
+            :style="{ width: '29%', height: picHeight }"
         >
           <img
               src="@/assets/images/cases/bakinsky.png"
@@ -117,8 +117,8 @@
           </div>
         </div>
         <div
-            class="cases__elem-wrapper"
-            :style="{ width: '23%', height: '60vh' }"
+            class="cases__elem-wrapper zieda-lounge"
+            :style="{ width: '23%', height: picHeight }"
         >
           <img
               src="@/assets/images/cases/zieda-lounge.png"
@@ -140,7 +140,7 @@
       <div class="cases__row">
         <div
             class="cases__elem-wrapper"
-            :style="{ width: '27%', height: '60vh' }"
+            :style="{ width: '27%', height: picHeight }"
         >
           <img
               src="@/assets/images/cases/bfls.png"
@@ -159,8 +159,8 @@
           </div>
         </div>
         <div
-            class="cases__elem-wrapper"
-            :style="{ width: '46%', height: '60vh' }"
+            class="cases__elem-wrapper tacodor"
+            :style="{ width: '46%', height: picHeight }"
         >
           <img
               src="@/assets/images/cases/tacodor.png"
@@ -179,8 +179,8 @@
           </div>
         </div>
         <div
-            class="cases__elem-wrapper"
-            :style="{ width: '27%', height: '60vh' }"
+            class="cases__elem-wrapper cffera"
+            :style="{ width: '27%', height: picHeight }"
         >
           <img
               src="@/assets/images/cases/cffera-short.png"
@@ -201,8 +201,8 @@
       </div>
       <div class="cases__row">
         <div
-            class="cases__elem-wrapper"
-            :style="{ width: '46%', height: '60vh' }"
+            class="cases__elem-wrapper mc"
+            :style="{ width: '46%', height: picHeight }"
         >
           <img
               src="@/assets/images/cases/mcdonalds.png"
@@ -222,8 +222,8 @@
           </div>
         </div>
         <div
-            class="cases__elem-wrapper"
-            :style="{ width: '54%', height: '60vh' }"
+            class="cases__elem-wrapper zieda-clinic"
+            :style="{ width: '54%', height: picHeight }"
         >
           <img
               src="@/assets/images/cases/zieda-clinic.png"
@@ -275,109 +275,224 @@ export default {
       currentShownName: this.currentItem
     }
   },
+  computed: {
+    picHeight () {
+      return window.screen.width > 600 ? '60vh' : '16vh'
+    }
+  },
   methods: {
     showName (name) {
       this.currentShownName = name
+    }
+  },
+  mounted() {
+    if (this.currentItem) {
+      const topPosition = document.querySelector(`.${this.currentItem}`).offsetTop
+      document.querySelector('.ps').scrollTo(0, topPosition)
     }
   }
 }
 </script>
 
 <style lang="scss">
-.cases {
-  padding: 0 29px;
-  &__header {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 250px;
-  }
-  &__title_first {
-    font-family: SFPro;
-    font-size: 230px;
-    font-weight: 400;
-    line-height: 274px;
-    letter-spacing: 0;
-    text-align: left;
-  }
-  &__title {
-    display: flex;
-    flex-direction: row;
-  }
-  &__title_second {
-    font-family: SFPro;
-    font-size: 230px;
-    font-weight: 400;
-    line-height: 274px;
-    letter-spacing: 0;
-    text-align: left;
-    margin-right: 80px;
-    //width: max-content;
-  }
-  &__subtitle {
-    display: inline-block;
-    width: 210px;
-    align-self: center;
-  }
-  &__subheader {
-    font-family: Manrope;
-    font-size: 28px;
-    font-weight: 400;
-    line-height: 38px;
-    letter-spacing: 0;
-    text-align: left;
-  }
+@media screen and (min-width: 600px) {
+  .cases {
+    padding: 0 29px;
+    &__header {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 250px;
+    }
+    &__title_first {
+      font-family: SFPro;
+      font-size: 230px;
+      font-weight: 400;
+      line-height: 274px;
+      letter-spacing: 0;
+      text-align: left;
+    }
+    &__title {
+      display: flex;
+      flex-direction: row;
+    }
+    &__title_second {
+      font-family: SFPro;
+      font-size: 230px;
+      font-weight: 400;
+      line-height: 274px;
+      letter-spacing: 0;
+      text-align: left;
+      margin-right: 80px;
+      //width: max-content;
+    }
+    &__subtitle {
+      display: inline-block;
+      width: 210px;
+      align-self: center;
+    }
+    &__subheader {
+      font-family: Manrope;
+      font-size: 28px;
+      font-weight: 400;
+      line-height: 38px;
+      letter-spacing: 0;
+      text-align: left;
+    }
 
-  &__content {
-    display: flex;
-    gap: 26px;
-    flex-direction: column;
-    margin-bottom: 170px;
-  }
-  &__row {
-    display: flex;
-    gap: 26px;
-    flex-direction: row;
-    //height: 470px;
-    & img {
-      height: 100%;
+    &__content {
+      display: flex;
+      gap: 26px;
+      flex-direction: column;
+      margin-bottom: 170px;
+    }
+    &__row {
+      display: flex;
+      gap: 26px;
+      flex-direction: row;
+      //height: 470px;
+      & img {
+        height: 100%;
+        width: 100%;
+      }
       width: 100%;
     }
-    width: 100%;
-  }
-  &__elem-wrapper {
-    position: relative;
-  }
-  &__name {
-    position: absolute;
-    left: 0;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    gap: 16px;
-    background-color: rgba(0, 0, 0, 0.65);
-    padding: 7px;
-  }
-  &__title {
-    font-family: Manrope;
-    font-size: 26px;
-    font-weight: 400;
-    line-height: 36px;
-    letter-spacing: 0;
-    text-align: center;
-    text-transform: uppercase;
-  }
-  &__description {
-    font-family: Manrope;
-    font-size: 20px;
-    font-weight: 400;
-    line-height: 27px;
-    letter-spacing: 0;
-    text-align: center;
+    &__elem-wrapper {
+      position: relative;
+    }
+    &__name {
+      position: absolute;
+      left: 0;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      gap: 16px;
+      background-color: rgba(0, 0, 0, 0.65);
+      padding: 7px;
+    }
+    &__title {
+      font-family: Manrope;
+      font-size: 26px;
+      font-weight: 400;
+      line-height: 36px;
+      letter-spacing: 0;
+      text-align: center;
+      text-transform: uppercase;
+    }
+    &__description {
+      font-family: Manrope;
+      font-size: 20px;
+      font-weight: 400;
+      line-height: 27px;
+      letter-spacing: 0;
+      text-align: center;
+    }
   }
 }
 
+@media screen and (max-width: 600px) {
+  .cases {
+    padding: 0 8px;
+    &__header {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 50px;
+    }
+    &__title_first {
+      font-family: SFPro;
+      font-size: 60px;
+      font-weight: 400;
+      line-height: 71px;
+      letter-spacing: 0;
+      text-align: left;
+    }
+    &__title {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+    }
+    &__title_second {
+      font-family: SFPro;
+      font-size: 60px;
+      font-weight: 400;
+      line-height: 71px;
+      letter-spacing: 0;
+      text-align: left;
+      //margin-right: 80px;
+      //width: max-content;
+    }
+    &__subtitle {
+      display: inline-block;
+      width: 60px;
+      align-self: center;
+    }
+    &__subheader {
+      font-family: Manrope;
+      font-size: 8px;
+      font-weight: 400;
+      line-height: 11px;
+      letter-spacing: 0;
+      text-align: left;
+      text-transform: lowercase;
+    }
+
+    &__arrow {
+      height: 35px;
+    }
+    &__content {
+      display: flex;
+      gap: 6px;
+      flex-direction: column;
+      margin-bottom: 60px;
+    }
+    &__row {
+      display: flex;
+      gap: 6px;
+      flex-direction: row;
+      //height: 470px;
+      & img {
+        height: 100%;
+        width: 100%;
+      }
+      width: 100%;
+    }
+    &__elem-wrapper {
+      position: relative;
+    }
+    &__name {
+      position: absolute;
+      left: 0;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      gap: 16px;
+      background-color: rgba(0, 0, 0, 0.65);
+      padding: 7px;
+    }
+    &__title {
+      font-family: Manrope;
+      font-size: 10px;
+      font-weight: 400;
+      line-height: 14px;
+      letter-spacing: 0;
+      text-align: center;
+      text-transform: uppercase;
+    }
+    &__description {
+      font-family: Manrope;
+      font-size: 8px;
+      font-weight: 400;
+      line-height: 11px;
+      letter-spacing: 0;
+      text-align: center;
+    }
+  }
+}
 </style>

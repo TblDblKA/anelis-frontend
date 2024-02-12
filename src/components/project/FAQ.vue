@@ -30,13 +30,18 @@
             />
           </div>
         </div>
-        <div
-            class="hp-FAQ__answer"
-            v-show="currentFAQClickedId === question.id"
+        <transition
+            name="answer"
+            class="answer"
         >
-          <!--            TODO: добавить анимации сворачивания и разворачивания -->
-          {{ question.answer }}
-        </div>
+          <div
+              class="hp-FAQ__answer"
+              :class="`FAQ__${question.id}`"
+              v-show="currentFAQClickedId === question.id"
+          >
+            {{ question.answer }}
+          </div>
+        </transition>
       </div>
     </div>
   </div>
@@ -97,16 +102,16 @@ export default {
 
 <style lang="scss">
 .hp-FAQ {
-  margin-bottom: 220px;
+  margin-bottom: 70px;
   display: flex;
   flex-direction: column;
-  gap: 50px;
+  gap: 20px;
   align-items: center;
   &__header {
     font-weight: 400;
     font-family: SFPro, serif;
-    font-size: 212px;
-    line-height: 252px;
+    font-size: 60px;
+    line-height: 76px;
     word-wrap: break-word;
     text-align: center;
   }
@@ -114,12 +119,12 @@ export default {
     width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 10px;
   }
   &__text {
     display: flex;
     flex-direction: column;
-    gap: 30px;
+    gap: 10px;
   }
   &__question {
     display: flex;
@@ -132,21 +137,47 @@ export default {
   &__q {
     font-weight: 400;
     font-family: Manrope, serif;
-    font-size: 35px;
-    line-height: 90px;
+    font-size: 10px;
+    line-height: 30px;
     cursor: pointer;
   }
   &__icon {
-    height: 110px;
-    width: 50px;
+    height: 13px;
+    width: 13px;
     cursor: pointer;
   }
   &__answer {
-    padding-left: 20px;
+    padding-left: 5px;
     font-weight: 400;
     font-family: Manrope, serif;
-    font-size: 30px;
+    font-size: 9px;
+    line-height: 11px;
     text-align: left;
+  }
+}
+
+.answer {
+  position: relative;
+  height: 0;
+  transition: height 350ms;
+  &-enter,
+  &-leave-to {
+    opacity: 0;
+  }
+
+  &-leave,
+  &-enter-to {
+    opacity: 1;
+  }
+
+  &-enter-active,
+  &-leave-active {
+    width: 100%;
+    transition: opacity 200ms ease-in-out;
+  }
+
+  &-enter-active {
+    transition-delay: 100ms;
   }
 }
 </style>

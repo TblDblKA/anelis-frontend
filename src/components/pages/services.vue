@@ -24,7 +24,10 @@
           v-for="service in services"
           :key="service.id"
       >
-        <div class="service__header">
+        <div
+            class="service__header"
+            :class="`service_${service.id}`"
+        >
           <div class="service__number">
             {{ service.id }}
           </div>
@@ -41,13 +44,22 @@
           <div class="service__description">
             {{ service.subtitle }}
           </div>
-          <div class="service__button">
+          <div
+              class="service__button"
+              @click="onTarifsClick(service.id)"
+          >
             Tarifs
           </div>
         </div>
-<!--        TODO: Горизонтальный скролл-->
-<!--        TODO: сделать блять красиво-->
-        <div class="service__tariffs">
+        <vue-custom-scrollbar
+            class="scroll-area__services"
+            :settings="settings"
+            tagname="div"
+        >
+        <div
+            class="service__tariffs"
+            :class="`tariffs_${service.id}`"
+        >
           <div
               class="tariff__wrapper"
               v-for="tariff in service.tarifs"
@@ -66,18 +78,24 @@
                   {{ point.text }}
                 </li>
               </ul>
-              <div
-                  v-if="tariff?.footer"
-                  class="tariff__footer"
-              >
-                {{ tariff.footer }}
-              </div>
-              <div class="tariff__price">
-                {{ tariff.price }}
+              <div class="tariff__bottom">
+                <div
+                    v-if="tariff?.footer"
+                    class="tariff__footer"
+                >
+                  {{ tariff.footer }}
+                </div>
+                <div
+                    class="tariff__price"
+                    @click="onPriceClick()"
+                >
+                  {{ tariff.price }}
+                </div>
               </div>
             </div>
           </div>
         </div>
+        </vue-custom-scrollbar>
       </div>
     </div>
     <div class="our-services__info">
@@ -95,6 +113,8 @@
 
 <script>
 import AppSpriteIcon from '@/components/base/app-sprite-icon'
+import vueCustomScrollbar from 'vue-custom-scrollbar'
+import "vue-custom-scrollbar/dist/vueScrollbar.css"
 
 import Specialists from '@/components/project/specialists'
 import Results from '@/components/project/results'
@@ -110,14 +130,26 @@ export default {
     Specialists,
     Results,
     FAQ,
-    WorkWithUs
+    WorkWithUs,
+    vueCustomScrollbar
   },
   icons: {
     RightBottomArrow,
     RightArrow
   },
+  props: {
+    currentItem: {
+      type: String,
+      default: ''
+    }
+  },
   data () {
     return {
+      settings: {
+        suppressScrollX: false,
+        // useBothWheelAxes: true,
+        wheelPropagation: true
+      },
       services: [
         {
           id: '01',
@@ -232,7 +264,7 @@ export default {
                   text: 'Copywriting and design'
                 }
               ],
-              price: '???'
+              price: '$ 3759'
             }
           ]
         },
@@ -485,7 +517,7 @@ export default {
                   text: '2 edits'
                 }
               ],
-              price: '???'
+              price: '$ 3759'
             }
           ]
         },
@@ -573,216 +605,510 @@ export default {
   methods: {
     elemId (elem) {
       return `service_${elem}`
+    },
+    onTarifsClick (id) {
+      const scrollableElement = document.querySelector(`.tariffs_${id}`)
+      const topPosition = scrollableElement.parentNode.offsetTop - 50
+      console.log(topPosition, window.pageYOffset)
+      console.log(scrollableElement.parentNode)
+      document.querySelector('.ps').scrollTo(0, topPosition)
+    },
+    onPriceClick () {
+      const topPosition = document.querySelector('.work').offsetTop
+      document.querySelector('.ps').scrollTo(0, topPosition)
+    },
+  },
+  mounted() {
+    if (this.currentItem) {
+      const topPosition = document.querySelector(`.service_${this.currentItem}`).offsetTop
+      document.querySelector('.ps').scrollTo(0, topPosition)
     }
+
+    const scrollableParent = document.querySelector('.our-services')
+    scrollableParent.addEventListener('wheel', (e) => {
+      const scrollableChildren = document.querySelectorAll('.service__tariffs')
+      let visibleChild = null
+      scrollableChildren.forEach((elem) => {
+        const rect = elem.getBoundingClientRect()
+        const viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight)
+        if ((rect.bottom < viewHeight) && (rect.top >= 0)) {
+          visibleChild = elem
+        }
+        if ((rect.height + 50 > viewHeight) && (rect.bottom < viewHeight) &&
+            ((e.deltaY > 0) || (rect.bottom - e.deltaY > viewHeight))
+        ) {
+          visibleChild = elem
+        }
+      })
+      if (visibleChild) {
+        const parentElem = visibleChild.parentNode
+        if (((e.deltaY > 0) && (parentElem.scrollLeft === parentElem.scrollLeftMax)) ||
+            ((e.deltaY < 0) && (parentElem.scrollLeft === 0))) {
+          return
+        }
+        e.preventDefault()
+        e.stopPropagation()
+        parentElem.scrollTo(parentElem.scrollLeft + e.deltaY / 2, 0)
+      }
+    }, { passive: false })
   }
 }
 </script>
 
 <style lang="scss">
-.our-services {
-  padding: 0 29px;
-  &__content {
+@media screen and (min-width: 600px) {
+  .our-services {
+    padding: 0 29px;
+    &__content {
+      display: flex;
+      flex-direction: column;
+      gap: 190px;
+      margin-bottom: 220px;
+    }
+    &__info {
+      font-family: Manrope;
+      font-size: 40px;
+      font-weight: 400;
+      line-height: 55px;
+      letter-spacing: 0em;
+      text-align: left;
+    }
+    &__arrow {
+      width: 198px;
+      height: 15px;
+      margin-bottom: 250px;
+    }
+  }
+
+  .header {
+    height: calc(100% - 30px);
+    padding-left: 29px;
+    padding-right: 23px;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    &__wrapper {
+      position: relative;
+      top: -30px;
+      background-image: url("../../assets/images/services/crowd.png");
+      width: calc(100vw - 60px);
+      background-size: cover;
+      height: calc(0.49 * 100vw);
+      margin-bottom: 277px;
+    }
+    &__subtitle {
+      display: flex;
+      flex-direction: column;
+      gap: 20px
+    }
+    &__text {
+      font-family: Manrope;
+      font-size: 20px;
+      font-weight: 400;
+      line-height: 27px;
+      text-align: left;
+    }
+    &__title {
+      font-size: 230px;
+      font-weight: 400;
+      line-height: 274px;
+      word-wrap: break-word;
+      text-align: left;
+    }
+    &__arrow {
+      // TODO: стрелка нормальной ширины
+      width: 100%;
+    }
+  }
+
+  .service {
     display: flex;
     flex-direction: column;
     gap: 190px;
-    margin-bottom: 220px;
-  }
-  &__info {
-    font-family: Manrope;
-    font-size: 40px;
-    font-weight: 400;
-    line-height: 55px;
-    letter-spacing: 0em;
-    text-align: left;
-  }
-  &__arrow {
-    width: 198px;
-    height: 15px;
-    margin-bottom: 250px;
-  }
-}
+    width: 100vw;
+    overflow-x: hidden;
+    &__wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 90px
+    }
+    &__header {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      border-bottom: 1px solid #D9D9D9;
+      gap: 15px;
+    }
+    &__number {
+      font-family: SFPro;
+      font-size: 150px;
+      font-weight: 600;
+      line-height: 179px;
+      letter-spacing: 0;
+      text-align: left;
+    }
+    &__title {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      font-family: Manrope;
+      font-size: 45px;
+      font-weight: 400;
+      line-height: 61px;
+      letter-spacing: 0em;
+      text-align: left;
+      word-wrap: break-word;
+      //max-width: 350px;
+      text-transform: uppercase;
+    }
+    &__subheader {
+      width: 75%;
+      align-self: center;
+      margin-bottom: 80px;
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+    &__description {
+      font-family: Manrope;
+      font-size: 25px;
+      font-weight: 400;
+      line-height: 34px;
+      letter-spacing: 0em;
+      text-align: left;
+    }
+    &__button {
+      width: 250px;
+      height: 50px;
+      background-color: #FFF9F9;
+      margin: 0 auto 0 0;
+      color: #131315;
+      text-transform: uppercase;
+      font-family: Manrope;
+      font-size: 25px;
+      font-weight: 500;
+      line-height: 50px;
+      letter-spacing: 0;
+      text-align: center;
+      cursor: pointer;
+    }
 
-.header {
-  height: calc(100% - 30px);
-  padding-left: 29px;
-  padding-right: 23px;
-  display: flex;
-  flex-direction: row;
-  align-items: flex-end;
-  &__wrapper {
-    position: relative;
-    top: -30px;
-    background-image: url("../../assets/images/services/crowd.png");
-    width: calc(100vw - 60px);
-    background-size: cover;
-    height: calc(0.49 * 100vw);
-    margin-bottom: 277px;
-  }
-  &__subtitle {
-    display: flex;
-    flex-direction: column;
-    gap: 20px
-  }
-  &__text {
-    font-family: Manrope;
-    font-size: 20px;
-    font-weight: 400;
-    line-height: 27px;
-    text-align: left;
-  }
-  &__title {
-    font-size: 230px;
-    font-weight: 400;
-    line-height: 274px;
-    word-wrap: break-word;
-    text-align: left;
-  }
-  &__arrow {
-    // TODO: стрелка нормальной ширины
-    width: 100%;
-  }
-}
-
-.service {
-  display: flex;
-  flex-direction: column;
-  gap: 190px;
-  &__wrapper {
-    display: flex;
-    flex-direction: column;
-    gap: 90px
-  }
-  &__header {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    border-bottom: 1px solid #D9D9D9;
-    gap: 15px;
-  }
-  &__number {
-    font-family: SFPro;
-    font-size: 150px;
-    font-weight: 600;
-    line-height: 179px;
-    letter-spacing: 0;
-    text-align: left;
-  }
-  &__title {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    font-family: Manrope;
-    font-size: 45px;
-    font-weight: 400;
-    line-height: 61px;
-    letter-spacing: 0em;
-    text-align: left;
-    word-wrap: break-word;
-    //max-width: 350px;
-    text-transform: uppercase;
-  }
-  &__subheader {
-    width: 75%;
-    align-self: center;
-    margin-bottom: 80px;
-    display: flex;
-    flex-direction: column;
-    gap: 40px;
-  }
-  &__description {
-    font-family: Manrope;
-    font-size: 25px;
-    font-weight: 400;
-    line-height: 34px;
-    letter-spacing: 0em;
-    text-align: left;
-  }
-  &__button {
-    width: 250px;
-    height: 50px;
-    background-color: #FFF9F9;
-    margin: 0 auto 0 0;
-    color: #131315;
-    text-transform: uppercase;
-    font-family: Manrope;
-    font-size: 25px;
-    font-weight: 500;
-    line-height: 50px;
-    letter-spacing: 0;
-    text-align: center;
-    cursor: pointer;
+    &__tariffs {
+      display: flex;
+      flex-direction: row;
+      gap: 60px;
+      justify-content: space-between;
+      overflow-x: hidden;
+      //width: calc(100vw - 60px);
+      width: max-content;
+    }
   }
 
-  &__tariffs {
-    //overflow-x: hidden;
-    display: flex;
-    flex-direction: row;
-    gap: 60px;
-    justify-content: space-between;
-    //width: max-content;
-    overflow: scroll;
-  }
-}
-
-.tariff {
-  &__wrapper {
-    border-left: 1px solid #D9D9D9;
-    padding-left: 30px;
-    width: 340px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
-  &__name {
-    font-family: Manrope;
-    font-size: 29px;
-    font-weight: 400;
-    line-height: 41px;
-    letter-spacing: 0;
-    text-transform: uppercase;
-    text-align: left;
-  }
+  .tariff {
+    &__wrapper {
+      border-left: 1px solid #D9D9D9;
+      padding-left: 30px;
+      width: 340px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      &:last-child {
+        margin-right: 100px;
+      }
+    }
+    &__name {
+      font-family: Manrope;
+      font-size: 29px;
+      font-weight: 400;
+      line-height: 41px;
+      letter-spacing: 0;
+      text-transform: uppercase;
+      text-align: left;
+    }
     &__content {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 150px;
+    }
+    &__points {
+      //position: relative;
+      //top: 144px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px
+    }
+    &__point {
+      font-family: Manrope;
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 25px;
+      letter-spacing: 0;
+      text-align: left;
+    }
+    &__bottom {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      justify-self: flex-end;
+      gap: 150px;
+    }
+    &__footer {
+      font-family: Manrope;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 22px;
+      letter-spacing: 0em;
+      text-align: center;
+    }
+    &__price {
+      width: 230px;
+      height: 44px;
+      font-family: Manrope;
+      font-size: 22px;
+      font-weight: 400;
+      line-height: 44px;
+      letter-spacing: 0em;
+      text-align: center;
+      border: 1px solid #FFF9F9;
+      align-self: center;
+      cursor: pointer;
+    }
+  }
+
+  .scroll-area__services {
+    width: 100vw;
+    margin: auto;
+    position: relative;
+    height: auto;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .our-services {
+    padding: 0 9px;
+    &__content {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    &__info {
+      font-family: Manrope;
+      font-size: 10px;
+      font-weight: 400;
+      line-height: 14px;
+      letter-spacing: 0em;
+      text-align: left;
+    }
+    &__arrow {
+      & .app-sprite-icon {
+        width: 198px;
+        height: 12px;
+      }
+      width: 200px;
+      margin-bottom: 20px;
+    }
+  }
+
+  .header {
+    height: calc(100% - 10px);
+    padding-left: 9px;
+    padding-right: 9px;
     display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    gap: 150px;
+    flex-direction: row;
+    align-items: flex-end;
+    &__wrapper {
+      position: relative;
+      top: -30px;
+      left: -9px;
+      background-image: url("../../assets/images/services/crowd.png");
+      width: 100vw;
+      background-size: cover;
+      height: calc(0.49 * 100vw);
+      margin-bottom: 30px;
+    }
+    &__subtitle {
+      display: flex;
+      flex-direction: column;
+    }
+    &__text {
+      font-family: Manrope;
+      font-size: 7px;
+      font-weight: 400;
+      line-height: 9px;
+      text-align: left;
+    }
+    &__title {
+      font-size: 55px;
+      font-weight: 400;
+      line-height: 65px;
+      word-wrap: break-word;
+      text-align: left;
+    }
+    &__arrow {
+      width: 100%;
+      height: 35px;
+    }
   }
-  &__points {
-    //position: relative;
-    //top: 144px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px
+
+  .service {
+    overflow-x: hidden;
+    &__wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 30px
+    }
+    &__header {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      border-bottom: 1px solid #D9D9D9;
+      gap: 15px;
+    }
+    &__number {
+      font-family: SFPro;
+      font-size: 53px;
+      font-weight: 600;
+      line-height: 63px;
+      letter-spacing: 0;
+      text-align: left;
+    }
+    &__title {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      font-family: Manrope;
+      font-size: 15px;
+      font-weight: 400;
+      line-height: 20px;
+      letter-spacing: 0em;
+      text-align: left;
+      word-wrap: break-word;
+      //max-width: 350px;
+      text-transform: uppercase;
+    }
+    &__subheader {
+      width: 75%;
+      align-self: center;
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+    }
+    &__description {
+      font-family: Manrope;
+      font-size: 10px;
+      font-weight: 400;
+      line-height: 14px;
+      letter-spacing: 0em;
+      text-align: left;
+    }
+    &__button {
+      width: 120px;
+      height: 30px;
+      background-color: #FFF9F9;
+      margin: 0 auto 0 0;
+      color: #131315;
+      text-transform: uppercase;
+      font-family: Manrope;
+      font-size: 15px;
+      font-weight: 500;
+      line-height: 30px;
+      letter-spacing: 0;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    &__tariffs {
+      display: flex;
+      flex-direction: row;
+      gap: 15px;
+      justify-content: space-between;
+      overflow-x: hidden;
+      width: max-content;
+    }
   }
-  &__point {
-    font-family: Manrope;
-    font-size: 18px;
-    font-weight: 400;
-    line-height: 25px;
-    letter-spacing: 0;
-    text-align: left;
+
+  .tariff {
+    &__wrapper {
+      border-left: 1px solid #D9D9D9;
+      padding-left: 10px;
+      width: 150px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      &:last-child {
+        margin-right: 40px;
+      }
+    }
+    &__name {
+      font-family: Manrope;
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 25px;
+      letter-spacing: 0;
+      text-transform: uppercase;
+      text-align: left;
+    }
+    &__content {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 15px;
+      flex-grow: 1;
+    }
+    &__points {
+      //position: relative;
+      //top: 144px;
+      padding-left: 20px!important;
+      display: flex;
+      flex-direction: column;
+      gap: 10px
+    }
+    &__point {
+      font-family: Manrope;
+      font-size: 10px;
+      font-weight: 400;
+      line-height: 12px;
+      letter-spacing: 0;
+      text-align: left;
+    }
+    &__bottom {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      justify-self: flex-end;
+      gap: 15px;
+    }
+    &__footer {
+      font-family: Manrope;
+      font-size: 8px;
+      font-weight: 400;
+      line-height: 10px;
+      letter-spacing: 0em;
+      text-align: center;
+      align-self: flex-end;
+    }
+    &__price {
+      width: 100px;
+      height: 17px;
+      font-family: Manrope;
+      font-size: 10px;
+      font-weight: 400;
+      line-height: 14px;
+      letter-spacing: 0em;
+      text-align: center;
+      border: 1px solid #FFF9F9;
+      align-self: center;
+      cursor: pointer;
+    }
   }
-  &__footer {
-    font-family: Manrope;
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 22px;
-    letter-spacing: 0em;
-    text-align: center;
-  }
-  &__price {
-    width: 230px;
-    height: 44px;
-    font-family: Manrope;
-    font-size: 22px;
-    font-weight: 400;
-    line-height: 44px;
-    letter-spacing: 0em;
-    text-align: center;
-    border: 1px solid #FFF9F9;
-    align-self: center;
-    cursor: pointer;
+
+  .scroll-area__services {
+    width: 100vw;
+    margin: auto;
+    position: relative;
+    height: auto;
   }
 }
 </style>

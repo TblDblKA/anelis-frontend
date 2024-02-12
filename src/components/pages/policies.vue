@@ -383,33 +383,67 @@ export default {
 </script>
 
 <style lang="scss">
-.policies {
-  padding-left: 21px;
-  &__header {
-    font-size: 230px;
-    font-weight: 400;
-    line-height: 274px;
-    letter-spacing: 0;
-    text-align: left;
-    text-transform: uppercase;
+@media screen and (min-width: 600px) {
+  .policies {
+    padding-left: 21px;
+    &__header {
+      font-size: 230px;
+      font-weight: 400;
+      line-height: 274px;
+      letter-spacing: 0;
+      text-align: left;
+      text-transform: uppercase;
+    }
+    &__content {
+      text-align: left;
+      padding-left: 135px;
+      padding-right: 140px;
+      font-family: Manrope;
+      font-size: 20px;
+      font-weight: 400;
+      line-height: 38px;
+      letter-spacing: 0;
+      text-transform: uppercase;
+      display: flex;
+      flex-direction: column;
+      gap: 100px;
+    }
+    &__text {
+      white-space: pre-wrap;
+      text-align: left;
+    }
   }
-  &__content {
-    text-align: left;
-    padding-left: 135px;
-    padding-right: 140px;
-    font-family: Manrope;
-    font-size: 20px;
-    font-weight: 400;
-    line-height: 38px;
-    letter-spacing: 0;
-    text-transform: uppercase;
-    display: flex;
-    flex-direction: column;
-    gap: 100px;
-  }
-  &__text {
-    white-space: pre-wrap;
-    text-align: left;
+}
+
+@media screen and (max-width: 600px) {
+  .policies {
+    padding-left: 9px;
+    &__header {
+      font-size: 60px;
+      font-weight: 400;
+      line-height: 70px;
+      letter-spacing: 0;
+      text-align: left;
+      text-transform: uppercase;
+    }
+    &__content {
+      text-align: left;
+      padding-left: 23px;
+      padding-right: 32px;
+      font-family: Manrope;
+      font-size: 20px;
+      font-weight: 400;
+      line-height: 38px;
+      letter-spacing: 0;
+      text-transform: uppercase;
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+    }
+    &__text {
+      white-space: pre-wrap;
+      text-align: left;
+    }
   }
 }
 </style>

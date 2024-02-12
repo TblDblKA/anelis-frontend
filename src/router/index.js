@@ -7,6 +7,7 @@ import Services from 'components/pages/services'
 import Cases from 'components/pages/cases'
 import Contacts from 'components/pages/contacts'
 import Policies from 'components/pages/policies'
+import PageNotFound from 'components/pages/page-not-found'
 
 Vue.use(Router)
 
@@ -33,7 +34,8 @@ const routes = [
         name: 'Services',
         meta: {
             reload: true,
-        }
+        },
+        props: true
     },
     {
         path: '/cases',
@@ -59,18 +61,25 @@ const routes = [
         meta: {
             reload: true
         }
-    }
+    },
+    { path: "*", component: PageNotFound }
 ]
 
 const router = new Router({
     mode: 'history',
     routes,
     linkExactActiveClass: 'active-link',
-    scrollBehavior() {
-        // TODO: скролл наверх при обновлении страницы
-        return { top: 0 }
-    },
-    props: true
+    props: true,
+    // scrollBehavior (to, from, savedPosition) {
+    //     if (savedPosition) {
+    //         return savedPosition
+    //     }
+    //
+    // }
+})
+
+router.afterEach(() => {
+    document.querySelector('.ps')?.scrollTo(0,0)
 })
 
 

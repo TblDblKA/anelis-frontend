@@ -1,5 +1,8 @@
 <template>
-  <div class="home-page">
+  <div
+      class="home-page"
+      ref="homepageref"
+  >
     <div class="home-page__header">
       <div class="home-page__title">
         WE ARE MARKETING AGENCY
@@ -91,9 +94,14 @@
     </div>
     <div class="hp-our-services">
       <div class="hp-our-services__header">
-        OUR &nbsp;&nbsp;SERVICES
+        OUR SERVICES
       </div>
-      <div class="hp-our-services__content">
+        <vue-custom-scrollbar
+            class="scroll-area__services"
+            :settings="settings"
+            tagname="div"
+        >
+          <div class="hp-our-services__content">
 <!--        TODO: исправить ошибку с тем, что выравнивание по нижнему краю в разделе OUR SERVICES у маленького элемента-->
         <div
             class="hp-our-services__item"
@@ -115,14 +123,20 @@
             <div class="hp-our-services__item-link">
               <app-link
                   :minor="true"
-                  @click="$router.push('/services')"
+                  @click="$router.push({
+                    name: 'Services',
+                    params: {
+                      currentItem: item.header
+                    }
+                  })"
               >
                 Read more
               </app-link>
             </div>
           </div>
         </div>
-      </div>
+          </div>
+        </vue-custom-scrollbar>
     </div>
     <div class="hp-cases">
       <div class="hp-cases__header">
@@ -141,11 +155,11 @@
           </div>
           <img
               src="@/assets/images/cases/zieda.png"
-              class="home-page__case-pic"
+              class="hp-cases__case-pic"
           />
           <img
               src="@/assets/images/cases/cerreto.png"
-              class="home-page__case-pic"
+              class="hp-cases__case-pic"
           />
           <div class="hp-cases__title">
             <div class="hp-cases__name">CERRETO.MEAT</div>
@@ -167,7 +181,7 @@
           </div>
           <img
               src="@/assets/images/cases/cffera.png"
-              class="home-page__case-pic"
+              class="hp-cases__case-pic"
           />
         </div>
         <span
@@ -185,6 +199,9 @@
 
 <script>
 import AppLink from 'components/base/app-link'
+import vueCustomScrollbar from 'vue-custom-scrollbar'
+import "vue-custom-scrollbar/dist/vueScrollbar.css"
+
 
 import FAQ from '@/components/project/FAQ'
 import WorkWithUs from 'components/project/work-with-us'
@@ -194,10 +211,15 @@ export default {
   components: {
     AppLink,
     WorkWithUs,
-    FAQ
+    FAQ,
+    vueCustomScrollbar
   },
   data () {
     return {
+      settings: {
+        suppressScrollX: false,
+        // useBothWheelAxes: true,
+      },
       serviceList: [
         {
           header: '01',
@@ -224,314 +246,631 @@ export default {
   },
   methods: {
     onCaseClick (label) {
-      // TODO: переключаться на текущий кейс
+      document.querySelector('.ps').scrollTo(0,0)
       this.$router.push({
         name: 'Cases',
-        props: {
+        params: {
           currentItem: label
         }
       })
-
     }
   }
 }
 </script>
 
 <style lang="scss">
-.home-page {
-  padding: 0 29px;
-  &__header {
-    margin-bottom: 180px;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-  }
-  &__title {
-    font-size: 240px;
-    line-height: 270px;
-    font-weight: 400;
-    text-align: start;
-    display: inline-block;
-    margin-bottom: 150px;
-  }
-  &__subtitle {
-    display: inline-block;
-    font-size: 25px;
-    line-height: 34px;
-    width: 290px;
-    padding-left: 20px;
-    text-align: left;
-  }
-  &__follow-me {
-    width: calc(100% - 60px);
-    //height: ;
-    padding: 0 25px;
-  }
-  &__about-us {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    margin-bottom: 150px;
-  }
-  &__reviews {
-    display: flex;
-    flex-direction: row;
-    gap: 130px;
-    &-img {
-      width: 695px;
-      height: 800px;
+@media screen and (min-width: 600px) {
+  .home-page {
+    padding: 0 29px;
+    &__header {
+      margin-bottom: 180px;
+      display: flex;
+      align-items: center;
+      flex-direction: column;
     }
-  }
-}
-
-.hp-about-us {
-  &__title {
-    font-size: 212px;
-    line-height: 253px;
-    //text-align: left;
-  }
-  &__subheader {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    font-family: Manrope, serif;
-    max-width: fit-content;
-
-    &_text {
-      font-size: 40px;
-      line-height: 55px;
-      text-align: left;
-      padding-bottom: 40px;
-      margin-bottom: 70px;
-      border-bottom: 1px solid #FFF9F9;
+    &__title {
+      font-size: 240px;
+      line-height: 270px;
+      font-weight: 400;
+      text-align: start;
       display: inline-block;
-      width: auto;
+      margin-bottom: 150px;
     }
-  }
-  &__subtitle {
-    font-size: 25px;
-    text-align: left;
-    //width: inherit;
-    width: 1010px;
-  }
-}
-
-.hp-reviews {
-  display: flex;
-  flex-direction: row;
-  gap: 70px;
-  position: relative;
-  justify-content: space-between;
-  margin-bottom: 180px;
-  &-img {
-    max-width: 842px;
-    //max-height: 968px;
-    width: 100%;
-    flex-grow: 1;
-  }
-  font-family: Manrope, serif;
-  &__title {
-    font-size: 40px;
-    font-weight: 600;
-    line-height: 48px;
-    word-wrap: break-word;
-    text-align: left;
-    max-width: 730px;
-    margin-bottom: 50px;
-  }
-  &__subtitle {
-    font-size: 18px;
-    min-width: 520px;
-    max-width: 620px;
-    font-weight: 400;
-    line-height: 26px;
-    word-wrap: break-word;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    text-align: left;
-    gap: 30px;
-    & span + span {
-      margin-bottom: 30px;
+    &__subtitle {
+      display: inline-block;
+      font-size: 25px;
+      line-height: 34px;
+      width: 290px;
+      padding-left: 20px;
+      text-align: left;
     }
-  }
-  &__review {
-    position: absolute;
-    top: 500px;
-    left: 600px;
-    max-width: 444px;
-    //height: 280px;
-    background-color: white;
-    box-shadow: 53.9735107421875px 53.9735107421875px 107.947021484375px rgba(0, 0, 0, 0.15);
-    border-radius: 8.64px;
-    padding: 20px 25px 24px;
-  }
-  &__review-text {
-    color: #131315;
-    font-size: 17px;
-    font-family: Manrope, serif;
-    font-weight: 400;
-    line-height: 28.07px;
-    word-wrap: break-word;
-    text-align: left;
-    margin-bottom: 30px;
-  }
-  &__person {
-    display: flex;
-    flex-direction: row;
-    gap: 15px
-  }
-  &__person-photo {
-    width: 50px;
-    height: 50px;
-    border-radius: 25px;
-  }
-  &__person-fullname {
-    //display: flex;
-    flex-direction: column;
-    gap: 8px;
-    justify-content: flex-start;
-    align-items: flex-start;
-    display: inline-flex;
-  }
-  &__person-name {
-    color: #131315;
-    font-size: 17.27px;
-    font-weight: 600;
-  }
-  &__person-job {
-    color: #131315;
-    font-size: 14px;
-    font-weight: 400;
-  }
-  &__all-reviews {
-    display: flex;
-    flex-direction: column;
-    gap: 40px;
-    align-items: flex-start;
-    flex-grow: 0.5;
-  }
-}
-
-.hp-our-services {
-  font-family: 'SFPro', serif;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 150px;
-  padding-bottom: 20px;
-  margin-bottom: 185px;
-  &__header {
-    font-size: 212px;
-    font-weight: 400;
-    width: 100%;
-    word-wrap: break-word;
-    text-align: left;
-  }
-  &__content {
-    display: flex;
-    flex-direction: row;
-    gap: 60px;
-    justify-content: space-between;
-  }
-  &__item {
-    display: flex;
-    flex-direction: column;
-    width: 20%;
-    border-left: 1px solid #D9D9D9;
-    padding-left: 55px;
-    gap: 250px;
-    &-title {
+    &__follow-me {
+      width: calc(100% - 60px);
+      //height: ;
+      padding: 0 25px;
+    }
+    &__about-us {
       display: flex;
       flex-direction: column;
-      gap: 25px;
-      flex-grow: 1;
-      flex-shrink: 1;
+      align-items: flex-start;
+      margin-bottom: 150px;
     }
-    &-header {
-      font-size: 150px;
-      font-weight: 600;
-      font-family: SFProSemiBold, serif;
-      align-self: flex-start;
+    &__reviews {
+      display: flex;
+      flex-direction: row;
+      gap: 130px;
+      &-img {
+        width: 695px;
+        height: 800px;
+      }
     }
-    &-label {
-      font-size: 24px;
+  }
+
+  .hp-about-us {
+    &__title {
+      font-size: 212px;
+      line-height: 253px;
+      //text-align: left;
+    }
+    &__subheader {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
       font-family: Manrope, serif;
-      font-weight: 500;
-      text-align: left;
-      word-wrap: break-word;
-      //padding-right: 60px;
-      height: 66px;
+      max-width: fit-content;
+
+      &_text {
+        font-size: 40px;
+        line-height: 55px;
+        text-align: left;
+        padding-bottom: 40px;
+        margin-bottom: 70px;
+        border-bottom: 1px solid #FFF9F9;
+        display: inline-block;
+        width: auto;
+      }
     }
-    &-footer {
+    &__subtitle {
+      font-size: 25px;
+      text-align: left;
+      //width: inherit;
+      width: 1010px;
+    }
+  }
+
+  .hp-reviews {
+    display: flex;
+    flex-direction: row;
+    gap: 70px;
+    position: relative;
+    justify-content: space-between;
+    margin-bottom: 180px;
+    &-img {
+      max-width: 842px;
+      //max-height: 968px;
+      width: 100%;
+      flex-grow: 1;
+    }
+    font-family: Manrope, serif;
+    &__title {
+      font-size: 40px;
+      font-weight: 600;
+      line-height: 48px;
+      word-wrap: break-word;
+      text-align: left;
+      max-width: 730px;
+      margin-bottom: 50px;
+    }
+    &__subtitle {
+      font-size: 18px;
+      min-width: 520px;
+      max-width: 620px;
+      font-weight: 400;
+      line-height: 26px;
+      word-wrap: break-word;
       display: flex;
       flex-direction: column;
-      gap: 50px;
-    }
-    &-text {
-      display: inline-block;
+      align-items: flex-start;
       text-align: left;
-      word-wrap: break-word;
-      padding-right: 60px;
+      gap: 30px;
+      & span + span {
+        margin-bottom: 30px;
+      }
+    }
+    &__review {
+      position: absolute;
+      top: 500px;
+      left: 600px;
+      max-width: 444px;
+      //height: 280px;
+      background-color: white;
+      box-shadow: 53.9735107421875px 53.9735107421875px 107.947021484375px rgba(0, 0, 0, 0.15);
+      border-radius: 8.64px;
+      padding: 20px 25px 24px;
+    }
+    &__review-text {
+      color: #131315;
       font-size: 17px;
       font-family: Manrope, serif;
       font-weight: 400;
+      line-height: 28.07px;
+      word-wrap: break-word;
+      text-align: left;
+      margin-bottom: 30px;
+    }
+    &__person {
+      display: flex;
+      flex-direction: row;
+      gap: 15px
+    }
+    &__person-photo {
+      width: 50px;
+      height: 50px;
+      border-radius: 25px;
+    }
+    &__person-fullname {
+      //display: flex;
+      flex-direction: column;
+      gap: 8px;
+      justify-content: flex-start;
+      align-items: flex-start;
+      display: inline-flex;
+    }
+    &__person-name {
+      color: #131315;
+      font-size: 17.27px;
+      font-weight: 600;
+    }
+    &__person-job {
+      color: #131315;
+      font-size: 14px;
+      font-weight: 400;
+    }
+    &__all-reviews {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+      align-items: flex-start;
+      flex-grow: 0.5;
+    }
+  }
+
+  .hp-our-services {
+    font-family: 'SFPro', serif;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 150px;
+    padding-bottom: 20px;
+    margin-bottom: 185px;
+    &__header {
+      font-size: 212px;
+      font-weight: 400;
+      width: 100%;
+      word-wrap: break-word;
+      text-align: left;
+    }
+    &__content {
+      display: flex;
+      flex-direction: row;
+      gap: 60px;
+      justify-content: space-between;
+    }
+    &__item {
+      display: flex;
+      flex-direction: column;
+      width: 20%;
+      border-left: 1px solid #D9D9D9;
+      padding-left: 55px;
+      gap: 250px;
+      &-title {
+        display: flex;
+        flex-direction: column;
+        gap: 25px;
+        flex-grow: 1;
+        flex-shrink: 1;
+      }
+      &-header {
+        font-size: 150px;
+        font-weight: 600;
+        font-family: SFProSemiBold, serif;
+        align-self: flex-start;
+      }
+      &-label {
+        font-size: 24px;
+        font-family: Manrope, serif;
+        font-weight: 500;
+        text-align: left;
+        word-wrap: break-word;
+        //padding-right: 60px;
+        height: 66px;
+      }
+      &-footer {
+        display: flex;
+        flex-direction: column;
+        gap: 50px;
+      }
+      &-text {
+        display: inline-block;
+        text-align: left;
+        word-wrap: break-word;
+        padding-right: 60px;
+        font-size: 17px;
+        font-family: Manrope, serif;
+        font-weight: 400;
+      }
+    }
+  }
+
+  .hp-cases {
+    display: flex;
+    flex-direction: column;
+    gap: 70px;
+    justify-content: space-between;
+    margin-bottom: 180px;
+    &__header {
+      font-weight: 400;
+      font-family: SFPro, serif;
+      font-size: 212px;
+      line-height: 252px;
+      word-wrap: break-word;
+      text-align: left;
+    }
+    &__content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 45px;
+    }
+    &__cases {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 33px 0;
+      margin: 0 auto;
+
+    }
+    &__title {
+      height: 620px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background-color: #131F31;
+    }
+    &__name {
+      font-size: 28px;
+      font-family: Manrope, serif;
+      font-weight: 400;
+      line-height: 38px;
+    }
+    &__case-pic {
+      height: 620px;
+    }
+    &__view {
+      font-size: 30px;
+      line-height: 50px;
+      cursor: pointer;
+      border-bottom: 1px solid #131315;
+      flex-shrink: 0;
+      &:hover {
+        border-bottom: 1px solid #FFF9F9;
+      }
     }
   }
 }
 
-.hp-cases {
-  display: flex;
-  flex-direction: column;
-  gap: 70px;
-  justify-content: space-between;
-  margin-bottom: 180px;
-  &__header {
-    font-weight: 400;
-    font-family: SFPro, serif;
-    font-size: 212px;
-    line-height: 252px;
-    word-wrap: break-word;
-    text-align: left;
+@media screen and (max-width: 600px) {
+  .home-page {
+    padding: 0 9px;
+    &__header {
+      margin-bottom: 34px;
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+    }
+    &__title {
+      font-size: 57px;
+      line-height: 67px;
+      font-weight: 400;
+      text-align: start;
+      display: inline-block;
+      margin-bottom: 50px;
+      font-family: Manrope;
+      word-spacing: 1rem;
+    }
+    &__subtitle {
+      display: inline-block;
+      font-size: 8px;
+      line-height: 10px;
+      width: 100px;
+      padding-left: 10px;
+      font-family: Manrope;
+      text-align: left;
+      word-spacing: 2px;
+    }
+    &__follow-me {
+      width: calc(100% - 18px);
+      //height: ;
+      //padding: 0 25px;
+    }
+    &__about-us {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      margin-bottom: 50px;
+    }
+    &__reviews {
+      display: flex;
+      flex-direction: row;
+      gap: 130px;
+      &-img {
+        width: 695px;
+        height: 800px;
+      }
+    }
   }
-  &__content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 45px;
-  }
-  &__cases {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 33px 0;
-    margin: 0 auto;
 
+  .hp-about-us {
+    &__title {
+      font-size: 57px;
+      line-height: 68px;
+      //text-align: left;
+    }
+    &__subheader {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      font-family: Manrope, serif;
+      max-width: fit-content;
+
+      &_text {
+        font-size: 10px;
+        line-height: 14px;
+        text-align: left;
+        padding-bottom: 16px;
+        margin-bottom: 16px;
+        border-bottom: 1px solid #FFF9F9;
+        display: inline-block;
+        width: auto;
+      }
+    }
+    &__subtitle {
+      font-size: 10px;
+      font-family: Manrope;
+      line-height: 14px;
+      text-align: left;
+      //width: inherit;
+      width: 300px;
+    }
   }
-  &__title {
-    height: 620px;
+
+  .hp-reviews {
+    //display: flex;
+    //flex-direction: row;
+    //gap: 70px;
+    position: relative;
+    justify-content: space-between;
+    margin-bottom: 180px;
+    &-img {
+      width: 161px;
+      height: 180px;
+      position: absolute;
+      bottom: -100px;
+      right: 0;
+    }
+    font-family: Manrope, serif;
+    &__title {
+      font-size: 20px;
+      font-weight: 600;
+      line-height: 24px;
+      word-wrap: break-word;
+      text-align: left;
+      //max-width: 730px;
+      margin-bottom: 30px;
+    }
+    &__subtitle {
+      font-size: 10px;
+      //min-width: 520px;
+      width: 280px;
+      font-weight: 400;
+      line-height: 15px;
+      word-wrap: break-word;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      text-align: left;
+      gap: 30px;
+      & span + span {
+        margin-bottom: 20px;
+      }
+      span:last-child {
+        width: 70%;
+      }
+    }
+    &__review {
+      position: absolute;
+      right: 100px;
+      //top: 500px;
+      //left: 600px;
+      max-width: 210px;
+      //height: 280px;
+      background-color: white;
+      box-shadow: 53.9735107421875px 53.9735107421875px 107.947021484375px rgba(0, 0, 0, 0.15);
+      border-radius: 8.64px;
+      padding: 8px 12px 8px;
+    }
+    &__review-text {
+      color: #131315;
+      font-size: 7px;
+      font-family: Manrope, serif;
+      font-weight: 400;
+      line-height: 12px;
+      word-wrap: break-word;
+      text-align: left;
+      margin-bottom: 10px;
+    }
+    &__person {
+      display: flex;
+      flex-direction: row;
+      gap: 10px
+    }
+    &__person-photo {
+      width: 30px;
+      height: 30px;
+      border-radius: 15px;
+    }
+    &__person-fullname {
+      //display: flex;
+      flex-direction: column;
+      //gap: 8px;
+      justify-content: flex-start;
+      align-items: flex-start;
+      display: inline-flex;
+    }
+    &__person-name {
+      color: #131315;
+      font-size: 10px;
+      line-height: 13px;
+      font-weight: 600;
+    }
+    &__person-job {
+      color: #131315;
+      font-size: 6px;
+      font-weight: 400;
+    }
+    &__all-reviews {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+      align-items: flex-start;
+      flex-grow: 0.5;
+    }
+  }
+
+  .hp-our-services {
+    font-family: 'SFPro', serif;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background-color: #131F31;
+    align-items: flex-start;
+    gap: 30px;
+    padding-bottom: 20px;
+    margin-bottom: 50px;
+    &__header {
+      font-size: 50px;
+      font-weight: 400;
+      width: 100%;
+      word-wrap: break-word;
+      text-align: left;
+      word-spacing: 4rem;
+    }
+    &__content {
+      display: flex;
+      flex-direction: row;
+      gap: 20px;
+      justify-content: space-between;
+    }
+    &__item {
+      display: flex;
+      width: 200px;
+      flex-direction: column;
+      border-left: 1px solid #D9D9D9;
+      padding-left: 10px;
+      gap: 15px;
+      &-title {
+        display: flex;
+        flex-direction: column;
+        //gap: 25px;
+        flex-grow: 1;
+        flex-shrink: 1;
+      }
+      &-header {
+        font-size: 53px;
+        line-height: 63px;
+        font-weight: 600;
+        font-family: SFProSemiBold, serif;
+        align-self: flex-start;
+      }
+      &-label {
+        font-size: 10px;
+        font-family: Manrope, serif;
+        font-weight: 500;
+        text-align: left;
+        word-wrap: break-word;
+        //padding-right: 60px;
+        height: 60px;
+      }
+      &-footer {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+      }
+      &-text {
+        display: inline-block;
+        text-align: left;
+        word-wrap: break-word;
+        padding-right: 20px;
+        font-size: 17px;
+        font-family: Manrope, serif;
+        font-weight: 400;
+        width: 130px;
+      }
+    }
   }
-  &__name {
-    font-size: 28px;
-    font-family: Manrope, serif;
-    font-weight: 400;
-    line-height: 38px;
-  }
-  &__case-pic {
-    height: 620px;
-  }
-  &__view {
-    font-size: 30px;
-    line-height: 50px;
-    cursor: pointer;
-    border-bottom: 1px solid #131315;
-    flex-shrink: 0;
-    &:hover {
-      border-bottom: 1px solid #FFF9F9;
+
+  .hp-cases {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    justify-content: space-between;
+    &__header {
+      font-weight: 400;
+      font-family: SFPro, serif;
+      font-size: 53px;
+      line-height: 63px;
+      word-wrap: break-word;
+      text-align: left;
+    }
+    &__content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+    &__cases {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: repeat(3, 147px);
+      gap: 10px 0;
+      //margin: 0 auto;
+
+    }
+    &__title {
+      height: 147px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background-color: #131F31;
+    }
+    &__name {
+      font-size: 10px;
+      font-family: Manrope, serif;
+      font-weight: 400;
+      line-height: 38px;
+    }
+    &__case-pic {
+      height: 147px!important;
+      width: 180px;
+    }
+    &__view {
+      font-size: 10px;
+      line-height: 15px;
+      cursor: pointer;
+      border-bottom: 1px solid #131315;
+      flex-shrink: 0;
+      &:hover {
+        border-bottom: 1px solid #FFF9F9;
+      }
     }
   }
 }

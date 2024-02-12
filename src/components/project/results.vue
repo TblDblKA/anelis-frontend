@@ -26,34 +26,69 @@ export default {
 </script>
 
 <style lang="scss">
-.results {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  gap: 150px;
-  margin-bottom: 250px;
-  &__item {
+@media screen and (min-width: 600px) {
+  .results {
     display: flex;
-    flex-direction: column;
-    gap: 20px;
-    align-items: center;
-    width: max-content;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 150px;
+    margin-bottom: 250px;
+    &__item {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      align-items: center;
+      width: max-content;
+    }
+    &__number {
+      width: 100%;
+      font-family: Manrope;
+      font-size: 80px;
+      font-weight: 400;
+      line-height: 109px;
+      color: #FFFFFF;
+      border-bottom: 1px solid #727272;
+    }
+    &__description {
+      font-family: Manrope;
+      font-size: 30px;
+      font-weight: 400;
+      line-height: 41px;
+      color: #727272;
+    }
   }
-  &__number {
-    width: 100%;
-    font-family: Manrope;
-    font-size: 80px;
-    font-weight: 400;
-    line-height: 109px;
-    color: #FFFFFF;
-    border-bottom: 1px solid #727272;
-  }
-  &__description {
-    font-family: Manrope;
-    font-size: 30px;
-    font-weight: 400;
-    line-height: 41px;
-    color: #727272;
+}
+
+@media screen and (max-width: 600px) {
+  .results {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 65px;
+    &__item {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: center;
+      width: max-content;
+    }
+    &__number {
+      width: 100%;
+      font-family: Manrope;
+      font-size: 20px;
+      font-weight: 400;
+      line-height: 27px;
+      color: #FFFFFF;
+      border-bottom: 1px solid #727272;
+    }
+    &__description {
+      font-family: Manrope;
+      font-size: 8px;
+      font-weight: 400;
+      line-height: 11px;
+      color: #727272;
+    }
   }
 }
 </style>
